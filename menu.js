@@ -82,18 +82,21 @@ const menu = [
 ];
 
 
-const sectionCenter = document.querySelector('.section-center');
-const container = document.querySelector('.btn-container');
+const sectionCenter = document.querySelector('.section-center'); // Contenedor de elementos del menú
+const container = document.querySelector('.btn-container'); //Contenedor de botones de filtro
 
 
+// Event listener para ejecutar funciones cuando la página se carga completamente
 window.addEventListener('DOMContentLoaded', function() {
-    displayMenuItems(menu);
-    displayMenuButtons();
+    //Llama a las funciones parar mostrar los elementos del menu y de los botones
+    displayMenuItems(menu); // Función para mostrar los elementos del menú
+    displayMenuButtons(); // Función para mostrar los botones 
 });
 
 
-
+// Función para mostrar los elementos del menú en la página
 function displayMenuItems(menuItems) {
+    // Usa map para convertir cada objeto del array 'menuItems' en HTML representando un elemento del menú
     let displayMenu = menuItems.map(function(item) {
 
         return `<article class="menu-item">
@@ -117,31 +120,38 @@ function displayMenuItems(menuItems) {
     sectionCenter.innerHTML = displayMenu;
 }
 
+// Función para mostrar los botones de acuerdo al filtro basado en las categorías del menú
 function displayMenuButtons() {
+    // Obtiene categorías únicas del menú utilizando reduce (all, breakfast, lunch, dinner... etc)
     const categories = menu.reduce(function(values, item) {
+        // Si la categoría no está incluida en 'values', la agrega
         if(!values.includes(item.category)) {
             values.push(item.category);
         }
-        return values;
-    }, ['all']);
+        return values; // Retorna el array actualizado con las categorías únicas
+    }, ['all']); // ['all'] se agrega como opción por defecto para mostrar todos los elementos
 
+    // Crea botones de filtrando dichos botones basados en las categorías obtenidas
     const categoryBtns = categories.map(function(category) {
         return `<button type="button" class="filter-btn" data-id="${category}">${category}</button>`
-    }).join('');
-    container.innerHTML = categoryBtns;
+    }).join(''); // .join('') --> Une los botones generados en un solo string
+    container.innerHTML = categoryBtns; // Actualiza el contenido del contenedor de botones con los botones generados
 
+    // Captura los botones y añade 'event listeners' para filtrar los elementos al hacer clic
     const filterBtn = document.querySelectorAll('.filter-btn');
-
     filterBtn.forEach(function(btn) {
         btn.addEventListener('click', function(e) {
-            /* console.log(e.currentTarget.dataset.id); */
+            // Obtiene la categoría seleccionada a través del dataset del botón
             const category = e.currentTarget.dataset.id;
+
+            // Filtra el array 'menu' para obtener los elementos de la categoría seleccionada
             const menuCategory = menu.filter(function(menuItem) {
                 if(menuItem.category === category) {
                     return menuItem;
                 }
             });
-            /* console.log(menuCategory); */
+
+            // Muestra los elementos correspondientes a la categoría seleccionada o todos los elementos
             if(category === 'all') {
                 displayMenuItems(menu);
             } else {
@@ -150,15 +160,3 @@ function displayMenuButtons() {
         })
     })
 }
-
-
-
-
-
-
-
-
-
-
-
-
